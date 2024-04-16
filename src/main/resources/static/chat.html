@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoMessenger</title>
+    <!-- Стили -->
+    <link rel="stylesheet" href="/styles/chat.css">
+</head>
+<body>
+
+<!-- Контейнер -->
+<div class="container">
+    <!-- Сайдбар -->
+    <div class="sidebar">
+        <h2>Активные чаты
+            <button id="createChatBtn">Создать чат</button>
+        </h2>
+        <div class="rooms-container"></div>
+    </div>
+    <!-- Основное содержимое -->
+    <div class="main-content">
+        <div id="selectedChat" class="selected-chat">
+            <div id="placeholderChat" class="placeholder-chat">Выберите чат</div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для создания чата -->
+<div id="createChatModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Создание чата</h2>
+        <!-- Форма создания чата -->
+        <form id="createChatForm">
+            <div class="form-group">
+                <label for="chatName">Введите название чата:</label>
+                <input type="text" id="chatName" name="chatName" placeholder="Название чата...">
+            </div>
+            <div class="form-group">
+                <label for="encryptionAlgorithm">Выберите алгоритм шифрования:</label>
+                <select id="encryptionAlgorithm" name="encryptionAlgorithm">
+                    <option value="MARS">MARS</option>
+                    <option value="RC6">RC6</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cipherMode">Выберите режим шифрования:</label>
+                <select id="cipherMode" name="cipherMode">
+                    <option value="ECB">ECB</option>
+                    <option value="CBC">CBC</option>
+                    <option value="PCBC">PCBC</option>
+                    <option value="CFB">CFB</option>
+                    <option value="OFB">OFB</option>
+                    <option value="CTR">CTR</option>
+                    <option value="Random Delta">Random Delta</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="paddingMode">Выберите режим набивки:</label>
+                <select id="paddingMode" name="paddingMode">
+                    <option value="Zeros">Zeros</option>
+                    <option value="ANSI X.923">ANSI X.923</option>
+                    <option value="PKCS7">PKCS7</option>
+                    <option value="ISO 10126">ISO 10126</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button id="submitChatBtn">Создать</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Скрипты -->
+<script src="/javascript/chat.js"></script>
+
+</body>
+</html>
