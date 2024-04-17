@@ -38,11 +38,11 @@ public class RoomController {
         return ResponseEntity.ok().body(rooms);
     }
 
-    @PostMapping("/{roomId}/join")
-    public ResponseEntity<String> joinRoom(@PathVariable Long roomId, @RequestBody JoinRequest joinRequest) {
+    @PostMapping("/{roomName}/join")
+    public ResponseEntity<String> joinRoom(@PathVariable String roomName, @RequestBody JoinRequest joinRequest) {
         long userId = joinRequest.getUserId();
 
-        Optional<Room> optionalRoom = roomService.getRoomById(roomId);
+        Optional<Room> optionalRoom = roomService.getRoomByName(roomName);
         if (optionalRoom.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

@@ -1,12 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
     fetchChats();
 
+    document.getElementById('submitCreateChatBtn').addEventListener('click', submitRoomForm);
+    document.getElementById('submitJoinChatBtn').addEventListener('click', submitJoinForm);
+    document.getElementById('logoutBtn').addEventListener('click', redirectToAuthPage);
     document.getElementById('createChatBtn').addEventListener('click', openCreateChatModal);
-    document.querySelector('.close').addEventListener('click', closeCreateChatModal);
-    document.getElementById('submitChatBtn').addEventListener('click', submitRoomForm);
+    document.getElementById('joinChatBtn').addEventListener('click', openJoinChatModal);
+    document.getElementById('createChatClose').addEventListener('click', closeCreateChatModal);
+    document.getElementById('joinChatClose').addEventListener('click', closeJoinChatModal);
 
     document.querySelector('.rooms-container').addEventListener('click', function (event) {
-        if (event.target.classList.contains('chat')) {
+        if (event.target.classList.contains('room')) {
             const roomId = event.target.dataset.roomId;
             updateChat(roomId);
         }
@@ -32,7 +36,7 @@ function fetchChats() {
             chatsContainer.innerHTML = '';
             chats.forEach(chat => {
                 const chatElement = document.createElement('div');
-                chatElement.classList.add('chat');
+                chatElement.classList.add('room');
                 chatElement.textContent = chat.name;
                 chatElement.setAttribute('data-room-id', chat.id);
                 chatsContainer.appendChild(chatElement);
@@ -65,9 +69,8 @@ async function submitRoomForm(event) {
             console.log(response);
             closeCreateChatModal();
 
-            const { id } = await response.json();
-            console.log(id);
-            await joinRoom(id);
+            const { name } = await response.json();
+            await joinRoom(name);
             await fetchChats();
         } else {
             throw new Error('Ошибка при создании чата');
@@ -78,9 +81,21 @@ async function submitRoomForm(event) {
     }
 }
 
+async function submitJoinForm(event) {
+    event.preventDefault();
+    try {
+        const roomName = document.getElementById('roomName').value;
+        await joinRoom(roomName);
+        await fetchChats();
+    } catch (error) {
+        console.error('Ошибка:', error);
+        alert('Ошибка при создании чата. Пожалуйста, попробуйте еще раз.');
+    }
+}
+
 async function createRoom(formData) {
     try {
-        const response = await fetch('/api/rooms/create', {
+        return await fetch('/api/rooms/create', {
             method: 'POST',
             mode: "cors",
             credentials: "include",
@@ -89,14 +104,13 @@ async function createRoom(formData) {
             },
             body: JSON.stringify(formData)
         });
-        return response;
     } catch (error) {
         console.error('Ошибка:', error);
         alert('Ошибка при создании чата. Пожалуйста, попробуйте еще раз.');
     }
 }
 
-async function joinRoom(roomId) {
+async function joinRoom(roomName) {
     const userId = sessionStorage.getItem('userId');
     if (!userId) {
         alert('Пользователь не аутентифицирован');
@@ -104,7 +118,7 @@ async function joinRoom(roomId) {
     }
 
     try {
-        const response = await fetch(`/api/rooms/${roomId}/join`, {
+        const response = await fetch(`/api/rooms/${roomName}/join`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -160,11 +174,22 @@ async function updateChat(roomId) {
     }
 }
 
-
 function openCreateChatModal() {
     document.getElementById('createChatModal').style.display = 'block';
 }
 
 function closeCreateChatModal() {
     document.getElementById('createChatModal').style.display = 'none';
+}
+
+function openJoinChatModal() {
+    document.getElementById('joinChatModal').style.display = 'block';
+}
+
+function closeJoinChatModal() {
+    document.getElementById('joinChatModal').style.display = 'none';
+}
+
+function redirectToAuthPage() {
+    window.location.href = 'index.html';
 }

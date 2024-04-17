@@ -4,22 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CryptoMessenger</title>
-    <!-- Стили -->
-    <link rel="stylesheet" href="/styles/chat.css">
+        <link rel="stylesheet" href="/styles/chat.css">
 </head>
 <body>
 
-<!-- Контейнер -->
 <div class="container">
-    <!-- Сайдбар -->
-    <div class="sidebar">
-        <h2>Активные чаты
-            <button id="createChatBtn">Создать чат</button>
-        </h2>
+    <!-- Боковая панель с кнопками -->
+    <div class="side-panel">
+        <button id="logoutBtn" style="background-color: transparent"><img src="images/logout.png" alt="Logout"></button>
+        <button id="createChatBtn" style="background-color: transparent"><img src="images/create-chat.png" alt="Create Chat"></button>
+        <button id="joinChatBtn" style="background-color: transparent"><img src="images/join-chat.png" alt="Join Chat">
+        </button>
+    </div>
+    <!-- Список чатов -->
+    <div class="room-list">
         <div class="rooms-container"></div>
     </div>
     <!-- Основное содержимое -->
-    <div class="main-content">
+    <div class="chat-content">
         <div id="selectedChat" class="selected-chat">
             <div id="placeholderChat" class="placeholder-chat">Выберите чат</div>
         </div>
@@ -29,7 +31,7 @@
 <!-- Модальное окно для создания чата -->
 <div id="createChatModal" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
+        <span id="createChatClose" class="close">&times;</span>
         <h2>Создание чата</h2>
         <!-- Форма создания чата -->
         <form id="createChatForm">
@@ -66,14 +68,31 @@
                 </select>
             </div>
             <div class="form-group">
-                <button id="submitChatBtn">Создать</button>
+                <button id="submitCreateChatBtn">Создать</button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- Скрипты -->
-<script src="/javascript/chat.js"></script>
+<!-- Модальное окно для поиска комнаты -->
+<div id="joinChatModal" class="modal">
+    <div class="modal-content">
+        <span id="joinChatClose" class="close">&times;</span>
+        <h2>Подключение к чату</h2>
+        <!-- Форма поиска комнаты -->
+        <form id="joinChatForm">
+            <div class="form-group">
+                <label for="roomName">Введите название комнаты:</label>
+                <input type="text" id="roomName" name="roomName" placeholder="Название комнаты...">
+            </div>
+            <div class="form-group">
+                <button id="submitJoinChatBtn">Подключиться</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="javascript/chat.js"></script>
 
 </body>
 </html>

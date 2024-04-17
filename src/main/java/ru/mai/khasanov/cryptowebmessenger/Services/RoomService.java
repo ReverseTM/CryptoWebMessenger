@@ -40,4 +40,8 @@ public class RoomService {
     public Optional<Room> getRoomById(Long roomId) {
         return roomRepository.findById(roomId);
     }
+
+    public Optional<Room> getRoomByName(String roomName) {
+        return roomRepository.findByName(roomName);
+    }
 }
