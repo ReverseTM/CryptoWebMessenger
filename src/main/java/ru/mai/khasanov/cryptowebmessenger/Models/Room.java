@@ -29,7 +29,6 @@ public class Room {
     @Column(name = "padding_mode")
     private String paddingMode;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "room_user",

@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CryptoMessenger</title>
-        <link rel="stylesheet" href="/styles/chat.css">
+    <link rel="stylesheet" href="/styles/chat.css">
 </head>
 <body>
 
 <div class="container">
     <!-- Боковая панель с кнопками -->
     <div class="side-panel">
-        <button id="logoutBtn" style="background-color: transparent"><img src="images/logout.png" alt="Logout"></button>
-        <button id="createChatBtn" style="background-color: transparent"><img src="images/create-chat.png" alt="Create Chat"></button>
-        <button id="joinChatBtn" style="background-color: transparent"><img src="images/join-chat.png" alt="Join Chat">
+        <button id="logoutBtn"><img src="images/logout.png" alt="Logout"></button>
+        <button id="createChatBtn"><img src="images/create-chat.png" alt="Create Chat"></button>
+        <button id="joinChatBtn"><img src="images/join-chat.png" alt="Join Chat">
         </button>
     </div>
     <!-- Список чатов -->
@@ -21,10 +21,9 @@
         <div class="rooms-container"></div>
     </div>
     <!-- Основное содержимое -->
-    <div class="chat-content">
-        <div id="selectedChat" class="selected-chat">
-            <div id="placeholderChat" class="placeholder-chat">Выберите чат</div>
-        </div>
+    <div class="room-content">
+        <div id="placeholderRoom" class="placeholder-room">Выберите чат</div>
+        <div id="selectedRoom" class="selected-room"></div>
     </div>
 </div>
 
@@ -89,6 +88,20 @@
                 <button id="submitJoinChatBtn">Подключиться</button>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Модальное окно для выхода пользователя -->
+<div id="logoutModal" class="modal">
+    <div class="modal-content">
+        <span id="logoutClose" class="close">&times;</span>
+        <h2>Выход из учётной записи</h2>
+        <p>Вы действительно хотите выйти?</p>
+        <!-- Кнопки для подтверждения или отмены выхода -->
+        <div class="button-group">
+            <button id="confirmLogoutBtn">Да</button>
+            <button id="cancelLogoutBtn">Нет</button>
+        </div>
     </div>
 </div>
 

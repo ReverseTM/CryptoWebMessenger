@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.mai.khasanov.cryptowebmessenger.DTO.JoinRequest;
+import ru.mai.khasanov.cryptowebmessenger.DTO.LeaveJoinRequest;
 import ru.mai.khasanov.cryptowebmessenger.DTO.RoomRequest;
 import ru.mai.khasanov.cryptowebmessenger.Models.Room;
 import ru.mai.khasanov.cryptowebmessenger.Models.User;
@@ -27,7 +27,12 @@ public class RoomController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Room> createRoom(@RequestBody RoomRequest roomRequest) {
+    public ResponseEntity<?> createRoom(@RequestBody RoomRequest roomRequest) {
+        Optional<Room> existRoom = roomService.getRoomByName(roomRequest.getName());
+        if (existRoom.isPresent()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Комната с таким названием уже существует");
+        }
+
         Room room = roomService.createRoom(roomRequest);
         return ResponseEntity.ok().body(room);
     }
@@ -39,7 +44,7 @@ public class RoomController {
     }
 
     @PostMapping("/{roomName}/join")
-    public ResponseEntity<String> joinRoom(@PathVariable String roomName, @RequestBody JoinRequest joinRequest) {
+    public ResponseEntity<String> joinRoom(@PathVariable String roomName, @RequestBody LeaveJoinRequest joinRequest) {
         long userId = joinRequest.getUserId();
 
         Optional<Room> optionalRoom = roomService.getRoomByName(roomName);
@@ -64,6 +69,38 @@ public class RoomController {
         userService.addRoomToUser(user, room);
 
         return ResponseEntity.ok().body("Пользователь успешно подключен к комнате");
+    }
+
+    @DeleteMapping("/{roomId}/leave")
+    public ResponseEntity<String> leaveRoom(@PathVariable long roomId, @RequestBody LeaveJoinRequest leaveRequest) {
+        long userId = leaveRequest.getUserId();
+
+        Optional<Room> optionalRoom = roomService.getRoomById(roomId);
+        if (optionalRoom.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Room room = optionalRoom.get();
+
+        Optional<User> optionalUser = userService.getUserById(userId);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка: Пользователь не найден");
+        }
+
+        User user = optionalUser.get();
+
+        boolean removed = roomService.removeUserFromRoom(user, room);
+        if (!removed) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Ошибка: Пользователь не найден в комнате");
+        }
+
+        userService.removeRoomFromUser(user, room);
+
+        if (room.getUsers().isEmpty()) {
+            roomService.deleteRoom(roomId);
+        }
+
+        return ResponseEntity.ok().body("Пользователь успешно отключен от комнаты");
     }
 
     @GetMapping("/{roomId}")

@@ -42,4 +42,9 @@ public class UserService {
         user.getRooms().add(room);
         userRepository.save(user);
     }
+
+    public void removeRoomFromUser(User user, Room room) {
+        user.getRooms().remove(room);
+        userRepository.save(user);
+    }
 }

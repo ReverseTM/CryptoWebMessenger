@@ -44,4 +44,17 @@ public class RoomService {
     public Optional<Room> getRoomByName(String roomName) {
         return roomRepository.findByName(roomName);
     }
+
+    public boolean removeUserFromRoom(User user, Room room) {
+        if (room.getUsers().contains(user)) {
+            room.getUsers().remove(user);
+            roomRepository.save(room);
+            return true;
+        }
+        return false;
+    }
+
+    public void deleteRoom(Long id) {
+        roomRepository.deleteById(id);
+    }
 }

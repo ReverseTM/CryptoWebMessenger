@@ -1,17 +1,30 @@
 document.addEventListener('DOMContentLoaded', function () {
     fetchChats();
 
-    document.getElementById('submitCreateChatBtn').addEventListener('click', submitRoomForm);
+    const placeholderRoom = document.getElementById('placeholderRoom');
+    const selectedRoom = document.getElementById('selectedRoom');
+
+    sessionStorage.setItem('placeholderRoom', 'placeholderRoom');
+    sessionStorage.setItem('selectedRoom', 'selectedRoom');
+
+    document.getElementById('submitCreateChatBtn').addEventListener('click', submitCreateRoomForm);
     document.getElementById('submitJoinChatBtn').addEventListener('click', submitJoinForm);
-    document.getElementById('logoutBtn').addEventListener('click', redirectToAuthPage);
+
+    document.getElementById('confirmLogoutBtn').addEventListener('click', redirectToAuthPage);
+    document.getElementById('cancelLogoutBtn').addEventListener('click', closeLogoutModal);
+
+    document.getElementById('logoutBtn').addEventListener('click', openLogoutModal);
     document.getElementById('createChatBtn').addEventListener('click', openCreateChatModal);
     document.getElementById('joinChatBtn').addEventListener('click', openJoinChatModal);
+
+    document.getElementById('logoutClose').addEventListener('click', closeLogoutModal);
     document.getElementById('createChatClose').addEventListener('click', closeCreateChatModal);
     document.getElementById('joinChatClose').addEventListener('click', closeJoinChatModal);
 
     document.querySelector('.rooms-container').addEventListener('click', function (event) {
         if (event.target.classList.contains('room')) {
             const roomId = event.target.dataset.roomId;
+            sessionStorage.setItem('roomId', roomId);
             updateChat(roomId);
         }
     });
@@ -47,7 +60,7 @@ function fetchChats() {
         });
 }
 
-async function submitRoomForm(event) {
+async function submitCreateRoomForm(event) {
     event.preventDefault();
     try {
         const chatName = document.getElementById('chatName').value;
@@ -66,7 +79,6 @@ async function submitRoomForm(event) {
 
         if (response.ok) {
             alert('Комната успешно создана!');
-            console.log(response);
             closeCreateChatModal();
 
             const { name } = await response.json();
@@ -86,10 +98,26 @@ async function submitJoinForm(event) {
     try {
         const roomName = document.getElementById('roomName').value;
         await joinRoom(roomName);
+        closeJoinChatModal();
         await fetchChats();
     } catch (error) {
         console.error('Ошибка:', error);
-        alert('Ошибка при создании чата. Пожалуйста, попробуйте еще раз.');
+        alert('Ошибка подключения к чату. Пожалуйста, попробуйте еще раз.');
+    }
+}
+
+async function submitLeaveForm() {
+    try {
+        const roomId = sessionStorage.getItem('roomId');
+        await leaveRoom(roomId);
+
+        hideSelectedRoom();
+        showPlaceholderRoom();
+
+        await fetchChats();
+    } catch (error) {
+        console.error('Ошибка:', error);
+        alert('Ошибка отключения от чата. Пожалуйста, попробуйте еще раз.');
     }
 }
 
@@ -138,6 +166,34 @@ async function joinRoom(roomName) {
     }
 }
 
+async function leaveRoom(roomId) {
+    const userId = sessionStorage.getItem('userId');
+    if (!userId) {
+        alert('Пользователь не аутентифицирован');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/rooms/${roomId}/leave`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId: userId })
+        });
+
+        if (response.ok) {
+            alert('Пользователь успешно отключён');
+        } else {
+            const errorMessage = await response.text();
+            alert(errorMessage);
+        }
+    } catch (error) {
+        console.error('Ошибка:', error);
+        alert('Произошла ошибка при отключении пользователя от комнаты');
+    }
+}
+
 async function updateChat(roomId) {
     try {
         const response = await fetch(`/api/rooms/${roomId}`);
@@ -146,32 +202,56 @@ async function updateChat(roomId) {
         }
 
         const room = await response.json();
-        const selectedChat = document.getElementById('selectedChat');
-        selectedChat.innerHTML = `
-            <h2>Выбран чат ${room.name}</h2>
-            <div class="chat">
-                <textarea id="messageText" name="messageText" rows="4" cols="50" placeholder="Введите сообщение..."></textarea>
-                <input type="file" id="fileInput" name="fileInput">
-                <button id="sendMessageBtn">Отправить сообщение</button>
-                <button id="cancelBtn">Отменить</button>
+
+        const selectedRoom = document.getElementById('selectedRoom');
+        selectedRoom.innerHTML = `
+            <div class="room-header">
+                <h2>Выбрана комната: ${room.name}</h2>
+                <button id="leaveChatBtn">Покинуть комнату</button>
             </div>
-            <hr>
-            <div class="chat-deteils">
-                <h2>Параметры чата</h2>
-                <p>Алгоритм шифрования: ${room.encryptionAlgorithm}</p>
-                <p>Режим шифрования: ${room.cipherMode}</p>
-                <p>Режим набивки: ${room.paddingMode}</p>
-                <button id="leaveChatBtn">Покинуть чат</button>
-                <button id="generateIVBtn">Сгенерировать IV</button>
+            <div class="room-details">
+                <div class="room-parameters">
+                    <h2>Параметры чата:</h2>
+                    <p>Алгоритм шифрования: ${room.encryptionAlgorithm}</p>
+                    <p>Режим шифрования: ${room.cipherMode}</p>
+                    <p>Режим набивки: ${room.paddingMode}</p>
+                </div>
+                <div class="room-participants">
+                    <h2>Участники комнаты:</h2>
+                </div>
+            </div>
+            <div class="chat">
+                <div class="messages"></div>
+                <div class="input-area">
+                    <textarea id="messageText" name="messageText" placeholder="Введите сообщение..."></textarea>
+                    <button id="sendMessageBtn">Отправить</button>
+                </div>
             </div>
         `;
-        const placeholderChat = document.getElementById('placeholderChat');
-        if (placeholderChat) {
-            placeholderChat.style.display = 'none';
-        }
+
+        const roomParticipants = document.querySelector('.room-participants');
+
+        room.users.forEach(user => {
+            const userParagraph = document.createElement('p');
+            userParagraph.textContent = user.username;
+            roomParticipants.appendChild(userParagraph);
+        });
+        
+        document.getElementById('leaveChatBtn').addEventListener('click', submitLeaveForm);
+
+        hidePlaceholderRoom();
+        showSelectedRoom();
     } catch (error) {
         console.error('Ошибка при получении данных о чате:', error);
     }
+}
+
+function openLogoutModal() {
+    document.getElementById('logoutModal').style.display = 'block';
+}
+
+function closeLogoutModal() {
+    document.getElementById('logoutModal').style.display = 'none';
 }
 
 function openCreateChatModal() {
@@ -192,4 +272,24 @@ function closeJoinChatModal() {
 
 function redirectToAuthPage() {
     window.location.href = 'index.html';
+}
+
+function hidePlaceholderRoom() {
+    const placeholderRoomId = sessionStorage.getItem('placeholderRoom');
+    document.getElementById(placeholderRoomId).style.display = 'none';
+}
+
+function hideSelectedRoom() {
+    const selectedRoom = sessionStorage.getItem('selectedRoom');
+    document.getElementById(selectedRoom).style.display = 'none';
+}
+
+function showPlaceholderRoom() {
+    const placeholderRoomId = sessionStorage.getItem('placeholderRoom');
+    document.getElementById(placeholderRoomId).style.display = 'block';
+}
+
+function showSelectedRoom() {
+    const selectedRoom = sessionStorage.getItem('selectedRoom');
+    document.getElementById(selectedRoom).style.display = 'flex';
 }
