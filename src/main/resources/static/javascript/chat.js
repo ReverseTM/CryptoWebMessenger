@@ -223,8 +223,12 @@ async function updateChat(roomId) {
             <div class="chat">
                 <div class="messages"></div>
                 <div class="input-area">
+                    <input type="file" id="fileInput" name="fileInput" style="display: none;">
+                    <label for="fileInput">
+                        <img src="images/addFilesIcon.png" alt="Загрузить файл">
+                    </label>
                     <textarea id="messageText" name="messageText" placeholder="Введите сообщение..."></textarea>
-                    <button id="sendMessageBtn">Отправить</button>
+                    <button id="sendMessageBtn"><img src="images/sendMessageIcon.png" alt="Send Message"></button>
                 </div>
             </div>
         `;

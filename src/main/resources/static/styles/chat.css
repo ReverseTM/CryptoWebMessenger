@@ -1,16 +1,14 @@
 /* Глобальные стили */
-
 body {
-    font-family: Arial, sans-serif; /* Задает шрифт по умолчанию */
-    margin: 0; /* Убирает отступы по умолчанию */
-    padding: 0; /* Убирает поля по умолчанию */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 /* Стили контейнера */
-
 .container {
-    display: flex; /* Устанавливает режим отображения flex */
-    height: 100vh; /* Задает высоту контейнера на 100% высоты видимой области */
+    display: flex;
+    height: 100vh;
     width: 100%;
 }
 
@@ -26,76 +24,81 @@ body {
 
 /* Стили боковых кнопок */
 .side-panel button {
-    width: 30px; /* Задает ширину кнопки */
-    height: 30px; /* Задает высоту кнопки */
-    border: none; /* Убирает границу */
-    margin-bottom: 10px; /* Добавляет отступ снизу */
-    background-color: transparent; /* Задает цвет фона кнопки */
-    border-radius: 50%; /* Делает кнопку круглой */
-    display: flex; /* Устанавливает режим отображения flex */
-    justify-content: center; /* Выравнивает содержимое по горизонтали */
-    align-items: center; /* Выравнивает содержимое по вертикали */
-    cursor: pointer; /* Устанавливает курсор в виде указателя при наведении */
+    width: 30px;
+    height: 30px;
+    border: none;
+    margin-bottom: 10px;
+    background-color: transparent;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
 
 .side-panel button img {
-    width: 25px; /* Задает ширину изображения */
-    height: 25px; /* Задает высоту изображения */
+    width: 25px;
+    height: 25px;
 }
 
 /* Стили списка комнат */
 .room-list {
-    flex: 1; /* Позволяет списку комнат занимать оставшееся пространство */
-    display: flex; /* Устанавливает режим отображения flex */
-    flex-direction: column; /* Устанавливает вертикальное расположение элементов */
-    align-items: center; /* Выравнивает элементы по горизонтали */
-    background-color: #17212b; /* Задает цвет фона */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    background-color: #17212b;
 }
 
 .rooms-container {
-    width: 100%; /* Задает ширину контейнера на 100% */
-    overflow-y: auto; /* Добавляет вертикальную прокрутку при переполнении контента */
+    width: 100%;
+    overflow-y: auto;
 }
 
 .room {
-    height: 50px; /* Задает высоту */
-    width: 100%; /* Задает ширину на 100% */
-    padding: 10px; /* Добавляет отступы */
-    transition: background-color 0.3s ease; /* Добавляет плавный эффект перехода */
-    box-sizing: border-box; /* Учитывает границы и поля в общей ширине и высоте элемента */
-    background-color: #17212b; /* Задает цвет фона */
-    color: white; /* Задает цвет текста */
-    cursor: pointer; /* Устанавливает курсор в виде указателя при наведении */
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    height: 50px;
+    padding: 20px;
+    transition: background-color 0.3s ease;
+    box-sizing: border-box;
+    background-color: #17212b;
+    font-weight: bold;
+    font-family: "CaskaydiaCove NF SemiBold", sans-serif;
+    color: white;
+    cursor: pointer;
 }
 
 .room:hover {
-    filter: brightness(150%); /* Увеличивает яркость при наведении */
+    filter: brightness(150%);
 }
 
 /* Стили содержимого чата */
 .room-content {
     position: relative;
-    flex: 2; /* Позволяет содержимому чата занимать оставшееся пространство */
+    flex: 2;
     display: flex;
-    padding: 20px; /* Добавляет отступы */
-    background-color: #0e1621; /* Задает цвет фона */
+    background-color: #0e1621;
+    border-left: 2px solid #0e1621;
 }
 
 .placeholder-room {
-    position: absolute; /* Позиционирует элемент абсолютно */
-    top: 50%; /* Устанавливает верхнюю позицию на 50% от родительского элемента */
-    left: 50%; /* Устанавливает левую позицию на 50% от родительского элемента */
-    transform: translate(-50%, -50%); /* Центрирует элемент */
-    display: inline-block; /* Отображает как строчно-блочный элемент */
-    background-color: #f0f0f0; /* Задает цвет фона */
-    border-radius: 20px; /* Добавляет скругления углов */
-    padding: 10px 20px; /* Добавляет отступы */
-    text-align: center; /* Выравнивает текст по центру */
-    font-size: 18px; /* Задает размер шрифта */
-    font-weight: bold; /* Задает насыщенность шрифта */
-    color: #333; /* Задает цвет текста */
-    border: 2px solid #ccc; /* Добавляет границу */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Добавляет тень */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: inline-block;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    border: 2px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .selected-room {
@@ -110,6 +113,8 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
+    padding-left: 20px;
+    background-color: #17212b;
 }
 
 .room-header h2 {
@@ -120,29 +125,30 @@ body {
 }
 
 .room-header #leaveChatBtn {
-    padding: 10px 10px; /* Отступы */
-    font-size: 16px; /* Размер шрифта */
+    padding: 10px 10px;
+    font-size: 16px;
     font-weight: bold;
-    border: none; /* Убираем границу */
-    border-radius: 5px; /* Скругление углов */
-    background-color: #ff6f61; /* Цвет фона кнопки */
-    color: white; /* Цвет текста */
-    cursor: pointer; /* Курсор при наведении */
+    border: none;
+    border-radius: 5px;
+    background-color: #ff6f61;
+    color: white;
+    cursor: pointer;
 }
 
 .room-header #leaveChatBtn:hover {
-    background-color: #e0574f; /* Изменение цвета фона */
+    background-color: #e0574f;
 }
 
 .room-details {
     display: flex;
     flex-direction: row;
+    padding-left: 20px;
+    background-color: #17212b;
 }
 
 .room-parameters,
 .room-participants {
-    margin-right: 50px; /* Добавляет отступ справа между блоками */
-    margin-bottom: 20px;
+    margin-right: 50px;
 }
 
 .room-parameters h2,
@@ -150,7 +156,7 @@ body {
     font-size: 16px;
     line-height: 1.6;
     color: white;
-    margin-bottom: 10px; /* Добавляет отступ снизу */
+    margin-bottom: 10px;
 }
 
 .room-parameters p,
@@ -165,41 +171,68 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    border: 1px solid #ccc; /* Граница для стилизации */
 }
 
 .messages {
     flex: 1;
-    overflow-y: auto; /* Разрешаем прокрутку, если сообщений слишком много */
-    padding: 10px; /* Отступы внутри окна сообщений */
+    overflow-y: auto;
+    padding: 20px;
 }
 
 .message {
-    margin-bottom: 10px; /* Отступ между сообщениями */
+    margin-bottom: 10px;
 }
 
 .input-area {
     display: flex;
-    /*padding: 10px; !* Отступы внутри области ввода *!*/
+    background-color: #17212b;
 }
 
 .chat textarea {
-    flex: 1; /* Растягиваем текстовое поле, чтобы оно занимало доступное пространство */
-    resize: none; /* Запрещаем изменение размера текстового поля пользователем */
+    flex: 1;
+    resize: none;
+    border: none;
+    padding-top: 15px;
+    padding-left: 10px;
+    margin-bottom: 5px;
+    background-color: transparent;
+    color: white;
+}
+
+.chat textarea:focus {
+    outline: none;
+}
+
+.input-area button,
+.input-area label {
+    width: 40px;
+    height: 30px;
+    border: none;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.input-area img {
+    width: 25px;
+    height: 25px;
 }
 
 /* Модальное окно для создания чата */
-
 #createChatModal {
-    display: none; /* Скрывает модальное окно по умолчанию */
-    position: fixed; /* Позиционирует модальное окно фиксированно */
-    z-index: 1; /* Устанавливает индекс слоя для отображения поверх других элементов */
-    left: 0; /* Устанавливает левую позицию */
-    top: 0; /* Устанавливает верхнюю позицию */
-    width: 100%; /* Задает ширину на 100% */
-    height: 100%; /* Задает высоту на 100% */
-    overflow: auto; /* Добавляет прокрутку при переполнении контента */
-    background-color: rgba(0, 0, 0, 0.5); /* Задает цвет фона с прозрачностью */
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 #createChatModal .modal-content {
@@ -207,152 +240,152 @@ body {
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    max-width: 20%; /* Изменяем максимальную ширину */
-    width: auto; /* Для центрирования содержимого */
+    max-width: 20%;
+    width: auto;
     border-radius: 5px;
     text-align: left;
 }
 
 #createChatModal .modal-content h2 {
-    text-align: center; /* Центрируем заголовок и кнопку */
+    text-align: center;
 }
 
 #createChatModal .modal-content .form-group {
-    margin-bottom: 15px; /* Добавляем отступ снизу каждой группе элементов формы */
+    margin-bottom: 15px;
 }
 
 #createChatModal .modal-content .form-group input {
-    width: 50%; /* Занимает всю доступную ширину */
-    padding: 10px; /* Внутренние отступы */
-    border: 1px solid #ccc; /* Граница */
-    border-radius: 5px; /* Скругленные углы */
-    box-sizing: border-box; /* Учитываем границы и отступы в расчетах ширины */
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 
 #createChatModal .modal-content button {
-    background-color: #4CAF50; /* Цвет фона кнопки */
-    color: white; /* Цвет текста кнопки */
-    padding: 10px 20px; /* Внутренние отступы */
-    border: none; /* Убираем границу */
-    border-radius: 5px; /* Скругляем углы */
-    cursor: pointer; /* Задаем курсор */
-    display: block; /* Делаем кнопку блочным элементом */
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
     margin: 20px auto 0;
 }
 
 #createChatModal .modal-content button:hover {
-    background-color: #45a049; /* Цвет фона при наведении */
+    background-color: #45a049;
 }
 
 #createChatModal .close {
-    color: red; /* Задает цвет текста */
-    float: right; /* Выравнивает по правому краю */
-    font-size: 28px; /* Задает размер шрифта */
-    font-weight: bold; /* Задает насыщенность шрифта */
+    color: red;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
     cursor: pointer;
 }
 
 /* Модальное окно для присоединения к чату */
 #joinChatModal {
-    display: none; /* Скрывает модальное окно по умолчанию */
-    position: fixed; /* Позиционирует модальное окно фиксированно */
-    z-index: 1; /* Устанавливает индекс слоя для отображения поверх других элементов */
-    left: 0; /* Устанавливает левую позицию */
-    top: 0; /* Устанавливает верхнюю позицию */
-    width: 100%; /* Задает ширину на 100% */
-    height: 100%; /* Задает высоту на 100% */
-    overflow: auto; /* Добавляет прокрутку при переполнении контента */
-    background-color: rgba(0, 0, 0, 0.5); /* Задает цвет фона с прозрачностью */
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 #joinChatModal .modal-content {
-    background-color: #fefefe; /* Задает цвет фона */
-    margin: 10% auto; /* Устанавливает внешний отступ сверху и снизу, остальное автоматически */
-    padding: 20px; /* Добавляет отступы */
-    border: 1px solid #888; /* Добавляет границу */
-    max-width: 20%; /* Изменяем максимальную ширину */
-    width: auto; /* Для центрирования содержимого */
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    max-width: 20%;
+    width: auto;
     border-radius: 5px;
     text-align: center;
 }
 
 #joinChatModal .modal-content .form-group label {
-    margin-bottom: 15px; /* Добавляем отступ между текстом и полем ввода */
+    margin-bottom: 15px;
 }
 
 #joinChatModal .modal-content .form-group input {
     margin-top: 10px;
-    width: 70%; /* Занимает всю доступную ширину */
-    padding: 10px; /* Внутренние отступы */
-    border: 1px solid #ccc; /* Граница */
-    border-radius: 5px; /* Скругленные углы */
-    box-sizing: border-box; /* Учитываем границы и отступы в расчетах ширины */
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 
 #joinChatModal .modal-content button {
-    background-color: #4CAF50; /* Цвет фона кнопки */
-    color: white; /* Цвет текста кнопки */
-    padding: 10px 20px; /* Внутренние отступы */
-    border: none; /* Убираем границу */
-    border-radius: 5px; /* Скругляем углы */
-    cursor: pointer; /* Задаем курсор */
-    display: block; /* Делаем кнопку блочным элементом */
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
     margin: 20px auto 0;
 }
 
 #joinChatModal .close {
-    color: red; /* Задает цвет текста */
-    float: right; /* Выравнивает по правому краю */
-    font-size: 28px; /* Задает размер шрифта */
-    font-weight: bold; /* Задает насыщенность шрифта */
+    color: red;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
     cursor: pointer;
 }
 
 /* Модальное окно выхода */
 #logoutModal {
-    display: none; /* Скрывает модальное окно по умолчанию */
-    position: fixed; /* Позиционирует модальное окно фиксированно */
-    z-index: 1; /* Устанавливает индекс слоя для отображения поверх других элементов */
-    left: 0; /* Устанавливает левую позицию */
-    top: 0; /* Устанавливает верхнюю позицию */
-    width: 100%; /* Задает ширину на 100% */
-    height: 100%; /* Задает высоту на 100% */
-    overflow: auto; /* Добавляет прокрутку при переполнении контента */
-    background-color: rgba(0, 0, 0, 0.5); /* Задает цвет фона с прозрачностью */
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 #logoutModal .modal-content {
-    background-color: #fefefe; /* Задает цвет фона */
-    margin: 10% auto; /* Устанавливает внешний отступ сверху и снизу, остальное автоматически */
-    padding: 20px; /* Добавляет отступы */
-    border: 1px solid #888; /* Добавляет границу */
-    max-width: 20%; /* Изменяем максимальную ширину */
-    width: auto; /* Для центрирования содержимого */
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    max-width: 20%;
+    width: auto;
     border-radius: 5px;
     text-align: center;
 }
 
 #logoutModal .button-group {
-    text-align: center; /* Выравнивает кнопки по центру горизонтально */
+    text-align: center;
 }
 
 #logoutModal .button-group button {
-    padding: 10px 20px; /* Добавляет отступы */
-    margin: 5px; /* Добавляет отступы */
-    border: none; /* Убирает границу */
-    cursor: pointer; /* Устанавливает курсор в виде указателя */
-    border-radius: 4px; /* Добавляет скругления углов */
-    outline: none; /* Убирает контур */
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    outline: none;
 }
 
 #logoutModal #cancelLogoutBtn {
-    background-color: #f44336; /* Задает цвет фона кнопки */
+    background-color: #f44336;
 }
 
 #logoutModal .close {
-    color: red; /* Задает цвет текста */
-    float: right; /* Выравнивает по правому краю */
-    font-size: 28px; /* Задает размер шрифта */
-    font-weight: bold; /* Задает насыщенность шрифта */
+    color: red;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
     cursor: pointer;
 }
