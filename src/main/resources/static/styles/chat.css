@@ -341,8 +341,8 @@ body {
     cursor: pointer;
 }
 
-/* Модальное окно выхода */
-#logoutModal {
+/* Модальное окно подтверждения */
+#confirmModal {
     display: none;
     position: fixed;
     z-index: 1;
@@ -354,7 +354,7 @@ body {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-#logoutModal .modal-content {
+#confirmModal .modal-content {
     background-color: #fefefe;
     margin: 10% auto;
     padding: 20px;
@@ -365,11 +365,11 @@ body {
     text-align: center;
 }
 
-#logoutModal .button-group {
+#confirmModal .button-group {
     text-align: center;
 }
 
-#logoutModal .button-group button {
+#confirmModal .button-group button {
     padding: 10px 20px;
     margin: 5px;
     border: none;
@@ -378,11 +378,11 @@ body {
     outline: none;
 }
 
-#logoutModal #cancelLogoutBtn {
+#confirmModal #cancelBtn {
     background-color: #f44336;
 }
 
-#logoutModal .close {
+#confirmModal .close {
     color: red;
     float: right;
     font-size: 28px;

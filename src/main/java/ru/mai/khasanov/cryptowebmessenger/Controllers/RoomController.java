@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/rooms")
+@RequestMapping("/api/user")
 public class RoomController {
     private final RoomService roomService;
     private final UserService userService;
@@ -26,7 +26,7 @@ public class RoomController {
         this.userService = userService;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/room/create")
     public ResponseEntity<?> createRoom(@RequestBody RoomRequest roomRequest) {
         Optional<Room> existRoom = roomService.getRoomByName(roomRequest.getName());
         if (existRoom.isPresent()) {
@@ -37,13 +37,7 @@ public class RoomController {
         return ResponseEntity.ok().body(room);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Room>> getAllUserRooms(@PathVariable("userId") long userId) {
-        List<Room> rooms = roomService.getRoomsByUserId(userId);
-        return ResponseEntity.ok().body(rooms);
-    }
-
-    @PostMapping("/{roomName}/join")
+    @PostMapping("/room/{roomName}/join")
     public ResponseEntity<String> joinRoom(@PathVariable String roomName, @RequestBody LeaveJoinRequest joinRequest) {
         long userId = joinRequest.getUserId();
 
@@ -71,7 +65,7 @@ public class RoomController {
         return ResponseEntity.ok().body("Пользователь успешно подключен к комнате");
     }
 
-    @DeleteMapping("/{roomId}/leave")
+    @DeleteMapping("/room/{roomId}/leave")
     public ResponseEntity<String> leaveRoom(@PathVariable long roomId, @RequestBody LeaveJoinRequest leaveRequest) {
         long userId = leaveRequest.getUserId();
 
@@ -103,7 +97,13 @@ public class RoomController {
         return ResponseEntity.ok().body("Пользователь успешно отключен от комнаты");
     }
 
-    @GetMapping("/{roomId}")
+    @GetMapping("/{userId}/rooms")
+    public ResponseEntity<List<Room>> getAllUserRooms(@PathVariable("userId") long userId) {
+        List<Room> rooms = roomService.getRoomsByUserId(userId);
+        return ResponseEntity.ok().body(rooms);
+    }
+
+    @GetMapping("/room/{roomId}")
     public ResponseEntity<Room> getRoomById(@PathVariable("roomId") long roomId) {
         Optional<Room> room = roomService.getRoomById(roomId);
         return room.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.notFound().build());
