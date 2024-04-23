@@ -97,6 +97,12 @@ public class RoomController {
         return ResponseEntity.ok().body("Пользователь успешно отключен от комнаты");
     }
 
+    @GetMapping("/rooms")
+    public ResponseEntity<List<Room>> getAllRooms() {
+        List<Room> rooms = roomService.getAllRooms();
+        return ResponseEntity.ok().body(rooms);
+    }
+
     @GetMapping("/{userId}/rooms")
     public ResponseEntity<List<Room>> getAllUserRooms(@PathVariable("userId") long userId) {
         List<Room> rooms = roomService.getRoomsByUserId(userId);

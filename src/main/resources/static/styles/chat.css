@@ -42,31 +42,26 @@ body {
 }
 
 /* Стили списка комнат */
-.room-list {
+
+.rooms-container {
     flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    overflow: hidden;
     background-color: #17212b;
-}
-
-.rooms-container {
-    width: 100%;
     overflow-y: auto;
 }
 
 .room {
-    display: flex;
-    align-items: center;
     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     height: 50px;
     padding: 20px;
     transition: background-color 0.3s ease;
     box-sizing: border-box;
     background-color: #17212b;
     font-weight: bold;
-    font-family: "CaskaydiaCove NF SemiBold", sans-serif;
+    line-height: 10px;
     color: white;
     cursor: pointer;
 }
@@ -76,6 +71,7 @@ body {
 }
 
 /* Стили содержимого чата */
+
 .room-content {
     position: relative;
     flex: 2;
@@ -103,68 +99,82 @@ body {
 
 .selected-room {
     width: 100%;
-    overflow: hidden;
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-.room-header {
+.room-details {
+    position: relative;
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    padding-left: 20px;
+    padding: 10px 20px;
     background-color: #17212b;
 }
 
-.room-header h2 {
-    font-size: 24px;
+.room-details h2 {
+    font-size: 16px;
     line-height: 1.6;
     color: white;
-    margin-right: 10px;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 500px;
 }
 
-.room-header #leaveChatBtn {
-    padding: 10px 10px;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
+.room-details p {
+    font-size: 14px;
+    color: grey;
+    margin: 0;
+    cursor: default;
+}
+
+.tooltip {
+    position: fixed;
+    height: 50px;
+    width: 150px;
+    max-width: 150px;
+    margin-top: 5px;
     border-radius: 5px;
-    background-color: #ff6f61;
+    padding: 5px;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background-color: #17212b;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.tooltip-item {
+    padding: 3px 0;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: bold;
     color: white;
+}
+
+.tooltip.show {
+    opacity: 1;
+}
+
+.room-details button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background-color: transparent;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
 }
 
-.room-header #leaveChatBtn:hover {
-    background-color: #e0574f;
-}
-
-.room-details {
-    display: flex;
-    flex-direction: row;
-    padding-left: 20px;
-    background-color: #17212b;
-}
-
-.room-parameters,
-.room-participants {
-    margin-right: 50px;
-}
-
-.room-parameters h2,
-.room-participants h2 {
-    font-size: 16px;
-    line-height: 1.6;
-    color: white;
-    margin-bottom: 10px;
-}
-
-.room-parameters p,
-.room-participants p {
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 1.4;
-    color: lightgray;
+.room-details img {
+    height: 30px;
+    width: 30px;
 }
 
 .chat {

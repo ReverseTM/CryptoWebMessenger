@@ -1,6 +1,7 @@
 package ru.mai.khasanov.cryptowebmessenger.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

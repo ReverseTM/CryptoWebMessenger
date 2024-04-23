@@ -198,20 +198,12 @@ async function loadRoomContent(roomId) {
 
     const selectedRoom = document.getElementById('selectedRoom');
     selectedRoom.innerHTML = `
-            <div class="room-header">
-                <h2>Выбрана комната: ${room.name}</h2>
-                <button id="leaveChatBtn">Покинуть комнату</button>
-            </div>
             <div class="room-details">
-                <div class="room-parameters">
-                    <h2>Параметры чата:</h2>
-                    <p>Алгоритм шифрования: ${room.encryptionAlgorithm}</p>
-                    <p>Режим шифрования: ${room.cipherMode}</p>
-                    <p>Режим набивки: ${room.paddingMode}</p>
+                <div>
+                    <h2>${room.name}</h2>
+                    <p id="participantsCount">${room.users.length} участника</p>
                 </div>
-                <div class="room-participants">
-                    <h2>Участники комнаты:</h2>
-                </div>
+                <button id="leaveChatBtn" title="Отключится"><img src="images/disconnectChatIcon.png" alt="Покинуть комнату"></button>
             </div>
             <div class="chat">
                 <div class="messages"></div>
@@ -226,16 +218,64 @@ async function loadRoomContent(roomId) {
             </div>
         `;
 
-    const roomParticipants = document.querySelector('.room-participants');
-
-    room.users.forEach(user => {
-        const userParagraph = document.createElement('p');
-        userParagraph.textContent = user.username;
-        roomParticipants.appendChild(userParagraph);
-    });
+    getUsers(room);
 
     document.getElementById('leaveChatBtn').addEventListener('click', openLeaveChatModal);
 }
+
+function getUsers(room) {
+    const participantsCount = document.getElementById('participantsCount');
+    const roomUsers = room.users;
+
+    let tooltip;
+
+    participantsCount.addEventListener("mouseover", showTooltip);
+    participantsCount.addEventListener("mouseout", hideTooltip);
+
+    function showTooltip() {
+        tooltip = createTooltip();
+        document.body.appendChild(tooltip);
+        positionTooltip();
+        setTimeout(function() {
+            tooltip.classList.add('show');
+        }, 10);
+    }
+
+    function hideTooltip() {
+        if (tooltip) {
+            tooltip.classList.remove('show');
+            setTimeout(function() {
+                document.body.removeChild(tooltip);
+                tooltip = null;
+            }, 300);
+        }
+    }
+
+    function createTooltip() {
+        const tooltip = document.createElement("div");
+        tooltip.classList.add("tooltip");
+
+        roomUsers.forEach(user => {
+            const item = document.createElement('div');
+            item.className = 'tooltip-item';
+            item.textContent = user.username;
+            tooltip.appendChild(item);
+        });
+
+        return tooltip;
+    }
+
+    function positionTooltip() {
+        const roomDetails = document.querySelector('.room-details');
+        const rectParticipantsCount = participantsCount.getBoundingClientRect();
+        const rectRoomDetails = roomDetails.getBoundingClientRect();
+        const tooltipLeft = rectParticipantsCount.left + window.scrollX;
+        const tooltipTop = rectRoomDetails.top + window.scrollY + roomDetails.offsetHeight;
+        tooltip.style.left = tooltipLeft + "px";
+        tooltip.style.top = tooltipTop + "px";
+    }
+}
+
 
 function openLeaveChatModal() {
     document.getElementById('confirmBtn').addEventListener('click', leaveUserFromRoom);

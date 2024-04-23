@@ -18,11 +18,6 @@ public class RoomService {
     public RoomService(RoomRepository roomRepository) {
         this.roomRepository = roomRepository;
     }
-
-    public List<Room> getRoomsByUserId(Long userId) {
-        return roomRepository.findAllByUsersId(userId);
-    }
-
     public Room createRoom(RoomRequest roomRequest) {
         Room room = new Room();
         room.setName(roomRequest.getName());
@@ -43,6 +38,14 @@ public class RoomService {
 
     public Optional<Room> getRoomByName(String roomName) {
         return roomRepository.findByName(roomName);
+    }
+
+    public List<Room> getRoomsByUserId(Long userId) {
+        return roomRepository.findAllByUsersId(userId);
+    }
+
+    public List<Room> getAllRooms() {
+        return roomRepository.findAll();
     }
 
     public boolean removeUserFromRoom(User user, Room room) {
