@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
-    fetchChats();
+    fetchUserRooms();
 
     sessionStorage.setItem('placeholderRoom', 'placeholderRoom');
     sessionStorage.setItem('selectedRoom', 'selectedRoom');
 
     document.getElementById('submitCreateChatBtn').addEventListener('click', createRoomByForm);
-    document.getElementById('submitJoinChatBtn').addEventListener('click', joinUserToRoom);
 
     document.getElementById('logoutBtn').addEventListener('click', openLogoutModal);
     document.getElementById('createChatBtn').addEventListener('click', openCreateChatModal);
@@ -15,33 +14,64 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('createChatClose').addEventListener('click', closeCreateChatModal);
     document.getElementById('joinChatClose').addEventListener('click', closeJoinChatModal);
 
-    document.querySelector('.rooms-container').addEventListener('click', function (event) {
+    document.querySelector('.user-rooms-container').addEventListener('click', function (event) {
         if (event.target.classList.contains('room')) {
             const roomId = event.target.dataset.roomId;
             sessionStorage.setItem('roomId', roomId);
             updateChat(roomId);
         }
     });
+
+    document.querySelector('.all-rooms-container').addEventListener('click', function (event) {
+        if (event.target.classList.contains('room')) {
+            joinUserToRoom(event);
+        }
+    });
 });
 
-async function fetchChats() {
+async function loadRooms(rooms, elementId) {
+    try {
+        const roomsContainer = document.querySelector(elementId);
+        roomsContainer.innerHTML = '';
+
+        rooms.forEach(chat => {
+            const roomElement = document.createElement('div');
+            roomElement.classList.add('room');
+            roomElement.textContent = chat.name;
+            roomElement.setAttribute('data-room-id', chat.id);
+            roomsContainer.appendChild(roomElement);
+        });
+    } catch (error) {
+        throw new Error('Ошибка при загрузке комнат');
+    }
+}
+
+async function fetchAllRooms() {
+    try {
+        const response = await fetch(`/api/user/rooms`);
+        if (!response.ok) {
+            throw new Error('Ошибка при загрузке комнат');
+        }
+
+        await loadRooms(await response.json(), '.all-rooms-container');
+    } catch (error) {
+        alert(error);
+    }
+}
+
+async function fetchUserRooms() {
     try {
         const userId = sessionStorage.getItem('userId');
         if (!userId) {
             throw new Error('Пользователь не аутентифицирован');
         }
 
-        const chats = await getRooms(userId);
-        const chatsContainer = document.querySelector('.rooms-container');
-        chatsContainer.innerHTML = '';
+        const response = await fetch(`/api/user/${userId}/rooms`);
+        if (!response.ok) {
+            throw new Error('Ошибка при загрузке комнат');
+        }
 
-        chats.forEach(chat => {
-            const chatElement = document.createElement('div');
-            chatElement.classList.add('room');
-            chatElement.textContent = chat.name;
-            chatElement.setAttribute('data-room-id', chat.id);
-            chatsContainer.appendChild(chatElement);
-        });
+        await loadRooms(await response.json(), '.user-rooms-container');
     } catch (error) {
         alert(error);
     }
@@ -75,8 +105,8 @@ async function createRoomByForm(event) {
 
         const room = await createRoom(roomData);
 
-        await joinUser(room.name);
-        await fetchChats();
+        await joinUser(room.id);
+        await fetchUserRooms();
 
         closeCreateChatModal();
     } catch (error) {
@@ -85,11 +115,12 @@ async function createRoomByForm(event) {
 }
 
 async function joinUserToRoom(event) {
-    event.preventDefault();
-
+    debugger;
     try {
-        await joinUser(document.getElementById('roomName').value);
-        await fetchChats();
+        const roomId = event.target.dataset.roomId;
+
+        await joinUser(roomId);
+        await fetchUserRooms();
 
         closeJoinChatModal();
     } catch (error) {
@@ -97,31 +128,23 @@ async function joinUserToRoom(event) {
     }
 }
 
-async function leaveUserFromRoom() {
+async function disconnectUserFromRoom() {
     try {
         const roomId = sessionStorage.getItem('roomId');
         if (!roomId) {
             throw new Error('Не удалось получить идентификатор комнаты');
         }
 
-        await leaveUser(roomId);
+        await disconnectUser(roomId);
 
         closeConfirmModal();
         hideSelectedRoom();
         showPlaceholderRoom();
 
-        await fetchChats();
+        await fetchUserRooms();
     } catch (error) {
         alert(error);
     }
-}
-
-async function getRooms(userId) {
-    const response = await fetch(`/api/user/${userId}/rooms`);
-    if (response.ok) {
-        return response.json();
-    }
-    throw new Error('Ошибка при загрузке комнат');
 }
 
 async function createRoom(roomData) {
@@ -142,17 +165,17 @@ async function createRoom(roomData) {
     throw new Error('Ошибка при создании комнаты');
 }
 
-async function joinUser(roomName) {
+async function joinUser(roomId) {
     const userId = sessionStorage.getItem('userId');
     if (!userId) {
         throw new Error('Пользователь не аутентифицирован');
     }
 
-    if (!roomName) {
+    if (!roomId) {
         throw new Error('Отсутствует имя комнаты');
     }
 
-    const response = await fetch(`/api/user/room/${roomName}/join`, {
+    const response = await fetch(`/api/user/room/${roomId}/join`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -167,7 +190,7 @@ async function joinUser(roomName) {
     }
 }
 
-async function leaveUser(roomId) {
+async function disconnectUser(roomId) {
     const userId = sessionStorage.getItem('userId');
     if (!userId) {
         throw new Error('Пользователь не аутентифицирован');
@@ -203,7 +226,7 @@ async function loadRoomContent(roomId) {
                     <h2>${room.name}</h2>
                     <p id="participantsCount">${room.users.length} участника</p>
                 </div>
-                <button id="leaveChatBtn" title="Отключится"><img src="images/disconnectChatIcon.png" alt="Покинуть комнату"></button>
+                <button id="disconnectChatBtn" title="Отключится"><img src="images/disconnectChatIcon.png" alt="Покинуть комнату"></button>
             </div>
             <div class="chat">
                 <div class="messages"></div>
@@ -220,7 +243,7 @@ async function loadRoomContent(roomId) {
 
     getUsers(room);
 
-    document.getElementById('leaveChatBtn').addEventListener('click', openLeaveChatModal);
+    document.getElementById('disconnectChatBtn').addEventListener('click', openDisconnectChatModal);
 }
 
 function getUsers(room) {
@@ -277,8 +300,8 @@ function getUsers(room) {
 }
 
 
-function openLeaveChatModal() {
-    document.getElementById('confirmBtn').addEventListener('click', leaveUserFromRoom);
+function openDisconnectChatModal() {
+    document.getElementById('confirmBtn').addEventListener('click', disconnectUserFromRoom);
     document.getElementById('cancelBtn').addEventListener('click', closeConfirmModal);
 
     document.getElementById('confirmModal').style.display = 'block';
@@ -303,8 +326,9 @@ function closeCreateChatModal() {
     document.getElementById('createChatModal').style.display = 'none';
 }
 
-function openJoinChatModal() {
+async function openJoinChatModal() {
     document.getElementById('joinChatModal').style.display = 'block';
+    await fetchAllRooms();
 }
 
 function closeJoinChatModal() {

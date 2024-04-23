@@ -43,7 +43,7 @@ body {
 
 /* Стили списка комнат */
 
-.rooms-container {
+.user-rooms-container {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -295,52 +295,40 @@ body {
     cursor: pointer;
 }
 
-/* Модальное окно для присоединения к чату */
+/*Модальное окно подключения к чату*/
+
 #joinChatModal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: #17212b;
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 #joinChatModal .modal-content {
-    background-color: #fefefe;
-    margin: 10% auto;
-    padding: 20px;
+    background-color: #17212b;
+    margin: 15% auto;
     border: 1px solid #888;
-    max-width: 20%;
-    width: auto;
-    border-radius: 5px;
+    width: 80%;
+    max-width: 600px;
+    position: relative;
+}
+
+#joinChatModal .all-rooms-container {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#joinChatModal .modal-content h2 {
     text-align: center;
-}
-
-#joinChatModal .modal-content .form-group label {
-    margin-bottom: 15px;
-}
-
-#joinChatModal .modal-content .form-group input {
-    margin-top: 10px;
-    width: 70%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-#joinChatModal .modal-content button {
-    background-color: #4CAF50;
+    font-size: 22px;
+    font-weight: bold;
     color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    display: block;
-    margin: 20px auto 0;
 }
 
 #joinChatModal .close {
@@ -349,6 +337,7 @@ body {
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    padding: 10px;
 }
 
 /* Модальное окно подтверждения */

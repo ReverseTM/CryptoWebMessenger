@@ -16,7 +16,7 @@
         <button id="joinChatBtn" title="Найти чат"><img src="images/joinChatIcon.png" alt="Join Chat"></button>
     </div>
     <!-- Список чатов -->
-    <div class="rooms-container"></div>
+    <div class="user-rooms-container"></div>
     <!-- Основное содержимое -->
     <div class="room-content">
         <div id="placeholderRoom" class="placeholder-room">Выберите чат</div>
@@ -74,17 +74,10 @@
 <div id="joinChatModal" class="modal">
     <div class="modal-content">
         <span id="joinChatClose" class="close">&times;</span>
-        <h2>Подключение к чату</h2>
-        <!-- Форма поиска комнаты -->
-        <form id="joinChatForm">
-            <div class="form-group">
-                <label for="roomName">Введите название комнаты:</label>
-                <input type="text" id="roomName" name="roomName" placeholder="Название комнаты...">
-            </div>
-            <div class="form-group">
-                <button id="submitJoinChatBtn">Подключиться</button>
-            </div>
-        </form>
+        <h2>Список комнат</h2>
+        <div class="all-rooms-container">
+            <!-- Список комнат здесь -->
+        </div>
     </div>
 </div>
 
